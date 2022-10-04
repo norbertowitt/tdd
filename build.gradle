@@ -20,6 +20,7 @@ dependencies {
 	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
 	runtimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'br.com.caelum.stella:caelum-stella-core:2.1.5'
 
 
 	compileOnly 'org.projectlombok:lombok:1.18.24'
