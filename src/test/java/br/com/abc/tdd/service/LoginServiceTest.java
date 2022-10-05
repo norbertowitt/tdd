@@ -23,6 +23,7 @@ public class LoginServiceTest {
     @Mock
     private UsuarioRepository usuarioRepository;
 
+    // Cenário de teste 1
     @Test
     public void deveEfetuarLoginComCpfComSucesso() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
@@ -34,6 +35,7 @@ public class LoginServiceTest {
                 .doesNotThrowAnyException();
     }
 
+    // Cenário de teste 2
     @Test
     public void deveEfetuarLoginComEmailComSucesso() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
@@ -47,6 +49,7 @@ public class LoginServiceTest {
         Mockito.verify(usuarioRepository).findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
     }
 
+    // Cenário de teste 3
     @Test
     public void deveLancarExcecaoAoEfetuarLoginComDadosNulos() {
         LoginDTO loginDTO = new LoginDTO();
@@ -56,18 +59,9 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 4
     @Test
-    public void deveLancarExcecaoAoInformarUsuarioNaoNuloESenhaNula() {
-        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
-        loginDTO.setSenha(null);
-
-        Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(LoginDataValidationException.class)
-                .hasMessage("Os dados informados são inválidos.");
-    }
-
-    @Test
-    public void deveLancarExcecaoAoInformarUsuarioNuloESenhaNaoNula() {
+    public void deveLancarExcecaoAoInformarUsuarioNulo() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
         loginDTO.setUsuario(null);
 
@@ -76,7 +70,30 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 5
+    @Test
+    public void deveLancarExcecaoAoInformarSenhaNula() {
+        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
+        loginDTO.setSenha(null);
 
+        Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
+                .isInstanceOf(LoginDataValidationException.class)
+                .hasMessage("Os dados informados são inválidos.");
+    }
+
+    // Cenário de teste 6
+    @Test
+    public void deveLancarExcecaoAoInformarTipoLoginNulo() {
+        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
+        loginDTO.setTipoLogin(null);
+
+        Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
+                .isInstanceOf(LoginDataValidationException.class)
+                .hasMessage("Os dados informados são inválidos.");
+    }
+
+
+    // Cenário de teste 7
     @Test
     public void deveLancarExcecaoAoInformarSenhaNaoCodificadaEmBase64() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
@@ -87,6 +104,7 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 8
     @Test
     public void deveLancarExcecaoAoInformarCpfInvalido() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFInvalido();
@@ -96,6 +114,7 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 9
     @Test
     public void deveLancarExcecaoAoInformarEmailInvalido() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailInvalido();
@@ -105,6 +124,7 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 10
     @Test
     public void deveLancarExcecaoAoInformarEmailComDominioInvalido() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComDominioEmailInvalido();
@@ -114,6 +134,7 @@ public class LoginServiceTest {
                 .hasMessage("Os dados informados são inválidos.");
     }
 
+    // Cenário de teste 11
     @Test
     public void deveLancarExcecaoQuandoNaoEncontrarUsuarioNaBaseComCpfESenha() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
@@ -126,6 +147,7 @@ public class LoginServiceTest {
                 .hasMessageContaining("Nenhum usuário foi encontrado com as credenciais informadas.");
     }
 
+    // Cenário de teste 12
     @Test
     public void deveLancarExcecaoQuandoNaoEncontrarUsuarioNaBaseComEmailESenha() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
@@ -138,6 +160,7 @@ public class LoginServiceTest {
                 .hasMessageContaining("Nenhum usuário foi encontrado com as credenciais informadas.");
     }
 
+    // Cenário de teste 13
     @Test
     public void deveLancarExcecaoQuandoEfetuarLoginComTipoNaoImplementado() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComTelefoneValido();
