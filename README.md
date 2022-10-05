@@ -11,28 +11,30 @@ Link da atividade: https://unisinos.instructure.com/courses/23764/assignments/64
 Projeto criado com **Gradle 7.5.1**, desenvolvido em **Java 17** com framework **Spring Boot 2.7.4**. Foi utilizado
 também **H2 Database Engine** para criação de uma simples base de dados em memória.
 
-**Todo o desenvolvimento foi feito com a técnica TDD.**
+**O desenvolvimento foi feito com a técnica TDD.**
 
 ## Instalação e primeiros passos
 
 1 - Necessário baixar e instalar JDK 17: https://www.oracle.com/java/technologies/downloads/#java17
 
-1.1 - Configurar variável de ambiente JAVA_HOME.
+1.1 - Configurar variável de ambiente JAVA_HOME. Também é possível apontar diretamente na IDE qual a versão Java
+utilizar para o projeto.
 
 2 - Clonar o repositório e abrir o projeto com sua IDE preferida (IntelliJ, Eclipse, etc). As IDEs costumam já
-configurar automaticamente um projeto com Spring Boot.
+configurar automaticamente um projeto com Gradle e Spring Boot.
 
 3 - Rodar ou Debugar o projeto. O servidor Tomcat será iniciardo em http://localhost:8080. Caso deseje mudar a porta,
-basta acessar o arquivo [applicartion.yml](./src/main/resources/application.yml), alterá-la na linha 2 e reiniciar o
+basta acessar o arquivo [application.yml](./src/main/resources/application.yml), alterá-la na linha 2 e reiniciar o
 projeto.
 
 3.1 - No momento em que o projeto está iniciando, o H2 cria uma base de dados de nome **abc** e uma tabela **usuario**.
 A tabela é populada com 5 usuários fictícios.
-É possível acessar a interface de gerenciamento do H2 em http://localhost:8080/h2 caso deseje. Usuário: **sa**, sem
+É possível acessar a interface de gerenciamento do H2 em http://localhost:8080/h2 caso necessário. Usuário: **sa**, sem
 senha.
 
-4 - Para visualizar a documentação da API, acesse http://localhost:8080/swagger-ui/. Caso tenha mudado a porta,
-deverá informar a porta utilizada.
+4 - Para visualizar a documentação da API, acesse http://localhost:8080/swagger-ui/. Caso a porta tenha sido alterada 
+no arquivo [application.yml](./src/main/resources/application.yml), a nova porta deverá ser informada no lugar de 
+**8080**.
 
 ## Usuários fictícios cadastrados
 
@@ -61,4 +63,5 @@ informadas.
 ## Testes
 
 Foi criada a classe [LoginServiceTest.java](./src/test/java/br/com/abc/tdd/service/LoginServiceTest.java) para testar
-a classe [LoginService.java](./src/main/java/br/com/abc/tdd/service/LoginService.java) responsável pelo requisito de Efetuar Login.
+a classe [LoginService.java](./src/main/java/br/com/abc/tdd/service/LoginService.java) responsável pelo requisito de
+Efetuar Login.

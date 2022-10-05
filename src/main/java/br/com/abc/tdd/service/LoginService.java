@@ -19,7 +19,7 @@ public class LoginService {
 
     private static final String MSG_USUARIO_NAO_ENCONTRADO = "Nenhum usuário foi encontrado com as credenciais informadas.";
     private static final String MSG_DADOS_INVALIDOS = "Os dados informados são inválidos.";
-    private static final String MSG_LOGIN_TIPO_NAO_IMPLEMENTADO = "Login do tipo %s não implementado.";
+    private static final String MSG_TIPO_LOGIN_NAO_IMPLEMENTADO = "Login via %s ainda não implementado.";
 
     private static final String EMAIL_REGEX_PATTERN = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
             + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
@@ -53,8 +53,11 @@ public class LoginService {
                 validarEmail(loginDTO.getUsuario());
                 validarEmailUsuarioESenha(loginDTO.getUsuario(), loginDTO.getSenha());
             }
-            default -> throw new CaseNotImplementedException(String.format(MSG_LOGIN_TIPO_NAO_IMPLEMENTADO,
-                    loginDTO.getTipoLogin()));
+            default -> {
+                String message = String.format(MSG_TIPO_LOGIN_NAO_IMPLEMENTADO, loginDTO.getTipoLogin());
+                log.error(message);
+                throw new CaseNotImplementedException(message);
+            }
         }
     }
 
@@ -73,7 +76,7 @@ public class LoginService {
             new CPFValidator().assertValid(cpf);
             log.info("O CPF {} é valido.", cpf);
         } catch (Exception e) {
-            log.error("O CPF {} é inválido.", cpf, e);
+            log.error("O CPF {} é inválido. {}", cpf, e.getMessage());
             throw new LoginDataValidationException(MSG_DADOS_INVALIDOS, e);
         }
     }

@@ -167,6 +167,6 @@ public class LoginServiceTest {
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
                 .isInstanceOf(CaseNotImplementedException.class)
-                .hasMessage(String.format("Login do tipo %s não implementado.", loginDTO.getTipoLogin()));
+                .hasMessage(String.format("Login via %s ainda não implementado.", loginDTO.getTipoLogin()));
     }
 }
