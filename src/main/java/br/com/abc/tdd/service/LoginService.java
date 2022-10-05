@@ -11,7 +11,6 @@ import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 @Service
@@ -38,8 +37,7 @@ public class LoginService {
     
     private void validarCredenciais(LoginDTO loginDTO) {
 
-        if (Objects.isNull(loginDTO.getUsuario())|| Objects.isNull(loginDTO.getSenha())
-                || Objects.isNull(loginDTO.getTipoLogin())) {
+        if (loginDTO.isThereAnyNullField()) {
             log.error("Algum parâmetro essencial está nulo.");
             throw new LoginDataValidationException(MSG_DADOS_INVALIDOS);
         }

@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.lang.reflect.Field;
+import java.util.Objects;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -21,4 +24,17 @@ public class LoginDTO {
 
     @ApiModelProperty(value = "Tipo do login: CPF ou EMAIL", required = true, example = "EMAIL")
     private TipoLoginEnum tipoLogin;
+
+    public Boolean isThereAnyNullField() {
+        try {
+            for (Field f : this.getClass().getDeclaredFields()) {
+                if (Objects.isNull(f.get(this)))
+                    return true;
+            }
+        } catch (Exception e) {
+            return true;
+        }
+
+        return false;
+    }
 }
