@@ -57,7 +57,7 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void deveLancarExcecaoAoInformarCpfNaoNuloESenhaNula() {
+    public void deveLancarExcecaoAoInformarUsuarioNaoNuloESenhaNula() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
         loginDTO.setSenha(null);
 
@@ -67,14 +67,15 @@ public class LoginServiceTest {
     }
 
     @Test
-    public void deveLancarExcecaoAoInformarEmailNaoNuloESenhaNula() {
-        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
-        loginDTO.setSenha(null);
+    public void deveLancarExcecaoAoInformarUsuarioNuloESenhaNaoNula() {
+        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
+        loginDTO.setUsuario(null);
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
                 .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
+
 
     @Test
     public void deveLancarExcecaoAoInformarSenhaNaoCodificadaEmBase64() {
