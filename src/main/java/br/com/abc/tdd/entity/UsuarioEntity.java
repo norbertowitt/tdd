@@ -1,6 +1,9 @@
 package br.com.abc.tdd.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
@@ -14,6 +17,9 @@ import javax.persistence.Table;
 @Table(name = "usuario")
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioEntity {
 
     @Id
