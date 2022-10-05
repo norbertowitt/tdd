@@ -1,8 +1,9 @@
 package br.com.abc.tdd.exceptionhandler;
 
 import br.com.abc.tdd.exceptionhandler.exception.ApiException;
+import br.com.abc.tdd.exceptionhandler.exception.CaseNotImplementedException;
 import br.com.abc.tdd.exceptionhandler.exception.UserNotFoundException;
-import br.com.abc.tdd.exceptionhandler.exception.UserValidationException;
+import br.com.abc.tdd.exceptionhandler.exception.LoginDataValidationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
     private static final String MSG_GENERICA = "Ocorreu um erro ao processar a sua requisição.";
     private static final String MSG_ERRO_SINTAXE_REQUISICAO = "Há um erro de sintaxe na requisição.";
 
-    @ExceptionHandler(value = {UserValidationException.class})
+    @ExceptionHandler(value = {LoginDataValidationException.class, CaseNotImplementedException.class})
     public ResponseEntity<Object> handleUserValidationException(Exception e, HttpServletRequest httpServletRequest) {
         return apiExceptionBuilder(e, httpServletRequest.getRequestURL().toString(), HttpStatus.UNPROCESSABLE_ENTITY);
     }

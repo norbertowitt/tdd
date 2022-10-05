@@ -1,7 +1,8 @@
 package br.com.abc.tdd.service;
 
+import br.com.abc.tdd.exceptionhandler.exception.CaseNotImplementedException;
 import br.com.abc.tdd.exceptionhandler.exception.UserNotFoundException;
-import br.com.abc.tdd.exceptionhandler.exception.UserValidationException;
+import br.com.abc.tdd.exceptionhandler.exception.LoginDataValidationException;
 import br.com.abc.tdd.model.LoginDTO;
 import br.com.abc.tdd.repository.UsuarioRepository;
 import br.com.abc.tdd.utils.DTOBuilder;
@@ -27,7 +28,7 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
 
         Mockito.doReturn(DTOBuilder.buildOptionalUsuarioEntity())
-                        .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getCpf(), loginDTO.getSenha());
+                        .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
         
         Assertions.assertThatCode(() -> loginService.efetuarLogin(loginDTO))
                 .doesNotThrowAnyException();
@@ -38,20 +39,20 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
 
         Mockito.doReturn(DTOBuilder.buildOptionalUsuarioEntity())
-                .when(usuarioRepository).findAllByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
+                .when(usuarioRepository).findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
 
         Assertions.assertThatCode(() -> loginService.efetuarLogin(loginDTO))
                 .doesNotThrowAnyException();
 
-        Mockito.verify(usuarioRepository).findAllByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
+        Mockito.verify(usuarioRepository).findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
     }
 
     @Test
-    public void deveLancarExcecaoAoInformarDadosNulos() {
+    public void deveLancarExcecaoAoEfetuarLoginComDadosNulos() {
         LoginDTO loginDTO = new LoginDTO();
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -61,7 +62,7 @@ public class LoginServiceTest {
         loginDTO.setSenha(null);
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -71,7 +72,17 @@ public class LoginServiceTest {
         loginDTO.setSenha(null);
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
+                .hasMessage("Os dados informados são inválidos.");
+    }
+
+    @Test
+    public void deveLancarExcecaoAoInformarSenhaNaoCodificadaEmBase64() {
+        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
+        loginDTO.setSenha("123456");
+
+        Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -80,7 +91,7 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFInvalido();
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -89,7 +100,7 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailInvalido();
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -98,7 +109,7 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComDominioEmailInvalido();
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
-                .isInstanceOf(UserValidationException.class)
+                .isInstanceOf(LoginDataValidationException.class)
                 .hasMessage("Os dados informados são inválidos.");
     }
 
@@ -107,7 +118,7 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
 
         Mockito.doReturn(DTOBuilder.buildEmptyOptionalUsuarioEntity())
-                .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getCpf(), loginDTO.getSenha());
+                .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
                 .isInstanceOf(UserNotFoundException.class)
@@ -119,10 +130,19 @@ public class LoginServiceTest {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
 
         Mockito.doReturn(DTOBuilder.buildEmptyOptionalUsuarioEntity())
-                .when(usuarioRepository).findAllByEmailAndSenha(loginDTO.getEmail(), loginDTO.getSenha());
+                .when(usuarioRepository).findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
 
         Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
                 .isInstanceOf(UserNotFoundException.class)
                 .hasMessageContaining("Nenhum usuário foi encontrado com as credenciais informadas.");
+    }
+
+    @Test
+    public void deveLancarExcecaoQuandoEfetuarLoginComTipoNaoImplementado() {
+        LoginDTO loginDTO = DTOBuilder.buildLoginDTOComTelefoneValido();
+
+        Assertions.assertThatThrownBy(() -> loginService.efetuarLogin(loginDTO))
+                .isInstanceOf(CaseNotImplementedException.class)
+                .hasMessage(String.format("Login do tipo %s não implementado.", loginDTO.getTipoLogin()));
     }
 }

@@ -1,5 +1,6 @@
 package br.com.abc.tdd.utils;
 
+import br.com.abc.tdd.enums.TipoLoginEnum;
 import br.com.abc.tdd.entity.UsuarioEntity;
 import br.com.abc.tdd.model.LoginDTO;
 
@@ -10,6 +11,7 @@ public class DTOBuilder {
 
     private static final String NOME_USUARIO = "João Pedro";
     private static final String EMAIL_VALIDO = "joao.pedro@edu.abc.br";
+    private static final String TELEFONE_VALIDO = "+5591982152453";
     private static final String CPF_VALIDO = "69484909728";
     private static final String SENHA = Base64.getEncoder().encodeToString("123456".getBytes());
 
@@ -19,36 +21,49 @@ public class DTOBuilder {
 
     public static LoginDTO buildLoginDTOComCPFValido() {
         return LoginDTO.builder()
-                .cpf(CPF_VALIDO)
+                .usuario(CPF_VALIDO)
                 .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.CPF)
                 .build();
     }
 
     public static LoginDTO buildLoginDTOComEmailValido() {
         return LoginDTO.builder()
-                .email(EMAIL_VALIDO)
+                .usuario(EMAIL_VALIDO)
                 .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.EMAIL)
+                .build();
+    }
+
+    public static LoginDTO buildLoginDTOComTelefoneValido() {
+        return LoginDTO.builder()
+                .usuario(TELEFONE_VALIDO)
+                .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.TELEFONE)
                 .build();
     }
 
     public static LoginDTO buildLoginDTOComCPFInvalido() {
         return LoginDTO.builder()
-                .cpf(CPF_INVALIDO)
+                .usuario(CPF_INVALIDO)
                 .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.CPF)
                 .build();
     }
 
     public static LoginDTO buildLoginDTOComEmailInvalido() {
         return LoginDTO.builder()
-                .email(EMAIL_INVALIDO)
+                .usuario(EMAIL_INVALIDO)
                 .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.EMAIL)
                 .build();
     }
 
     public static LoginDTO buildLoginDTOComDominioEmailInvalido() {
         return LoginDTO.builder()
-                .email(EMAIL_DOMINIO_INVALIDO)
+                .usuario(EMAIL_DOMINIO_INVALIDO)
                 .senha(SENHA)
+                .tipoLogin(TipoLoginEnum.EMAIL)
                 .build();
     }
 
