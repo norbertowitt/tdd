@@ -25,19 +25,22 @@ public class LoginServiceTest {
 
     // Cenário de teste 1
     @Test
-    public void deveEfetuarLoginComCpfComSucesso() {
+    public void deveEfetuarLoginPorCpfComSucesso() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComCPFValido();
 
         Mockito.doReturn(DTOBuilder.buildOptionalUsuarioEntity())
-                        .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
+                .when(usuarioRepository).findAllByCpfAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
         
         Assertions.assertThatCode(() -> loginService.efetuarLogin(loginDTO))
                 .doesNotThrowAnyException();
+
+        Mockito.verify(usuarioRepository)
+                .findAllByCpfAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
     }
 
     // Cenário de teste 2
     @Test
-    public void deveEfetuarLoginComEmailComSucesso() {
+    public void deveEfetuarLoginPorEmailComSucesso() {
         LoginDTO loginDTO = DTOBuilder.buildLoginDTOComEmailValido();
 
         Mockito.doReturn(DTOBuilder.buildOptionalUsuarioEntity())
@@ -46,7 +49,8 @@ public class LoginServiceTest {
         Assertions.assertThatCode(() -> loginService.efetuarLogin(loginDTO))
                 .doesNotThrowAnyException();
 
-        Mockito.verify(usuarioRepository).findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
+        Mockito.verify(usuarioRepository)
+                .findAllByEmailAndSenha(loginDTO.getUsuario(), loginDTO.getSenha());
     }
 
     // Cenário de teste 3
